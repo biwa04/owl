@@ -5,6 +5,7 @@ export {
   GatewayIntents,
   type Interaction,
   InteractionResponseTypes,
+  type Message,
   startBot,
 } from "https://deno.land/x/discordeno@13.0.0/mod.ts";
 
