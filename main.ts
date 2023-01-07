@@ -6,8 +6,11 @@ import {
   startRecordingCommand,
 } from "./commands/start-recording.ts";
 import { handleMessageToRecord } from "./commands/record.ts";
+import { ScrapboxRepository } from "./objects/page.ts";
+import { handleSaveCommand, saveCommand } from "./commands/save.ts";
 
 const recordingChannelRepository = new InMemoryRecordingChannelRepository();
+const pageRepository = new ScrapboxRepository();
 
 const bot = createBot({
   token: config()["DISCORD_BOT_TOKEN"],
@@ -18,6 +21,7 @@ const bot = createBot({
       console.log("Successfully connected to gateway");
       bot.helpers.createApplicationCommand(pingCommand);
       bot.helpers.createApplicationCommand(startRecordingCommand);
+      bot.helpers.createApplicationCommand(saveCommand);
     },
     interactionCreate(client, interaction) {
       handlePingCommand(client, interaction);
@@ -25,6 +29,12 @@ const bot = createBot({
         client,
         interaction,
         recordingChannelRepository,
+      );
+      handleSaveCommand(
+        client,
+        interaction,
+        recordingChannelRepository,
+        pageRepository,
       );
     },
     messageCreate(_, message) {
