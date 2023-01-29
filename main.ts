@@ -11,9 +11,11 @@ import { handleSaveCommand, saveCommand } from "./commands/save.ts";
 
 const recordingChannelRepository = new InMemoryRecordingChannelRepository();
 const pageRepository = new ScrapboxRepository();
+const DISCORD_BOT_TOKEN = Deno.env.get("DISCORD_BOT_TOKEN") ||
+  config()["DISCORD_BOT_TOKEN"];
 
 const bot = createBot({
-  token: config()["DISCORD_BOT_TOKEN"],
+  token: DISCORD_BOT_TOKEN,
   intents: GatewayIntents.MessageContent | GatewayIntents.Guilds |
     GatewayIntents.GuildMessages,
   events: {
