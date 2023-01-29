@@ -1,0 +1,28 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create dot env file
+        run: |
+          touch .env
+          echo "DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }}" >> .env
+
+      - name: Build
+        run: docker compose build
+      
+      - name: Deploy
+        run: docker stack deploy owl --compose-file docker-compose.yml
